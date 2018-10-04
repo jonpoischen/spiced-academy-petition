@@ -1,0 +1,48 @@
+.header {
+    border: 1px solid red;
+    background-color: pink;
+    margin: 20px;
+    padding: 20px;
+    color: yellow;
+}
+
+.view {
+    border: 1px solid darkgreen;
+    background-color: green;
+    margin: 20px;
+    padding: 20px;
+    color: white;
+}
+
+.partial {
+    border: 1px solid darkblue;
+    background-color: lightblue;
+    margin: 20px;
+    padding: 20px;
+}
+
+a {
+    text-decoration: none;
+    text-transform: lowercase;
+}
+
+span {
+    text-transform: lowercase;
+}
+
+input {
+    width: 480px;
+}
+
+canvas {
+    background-color: white;
+}
+
+label {
+    padding: 5px;
+}
+
+img {
+    width: 250px;
+    height: 244px;
+}
