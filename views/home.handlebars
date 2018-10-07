@@ -1,17 +1,20 @@
 <div class="header">
-    <h1>Sign the petition for Pikachu</h1>
-    <h2>(Otherwise she will be terminated!)</sh2>
+    <h3>Meters vs yards. Kilograms vs Pounds. Kilometer vs mile. Celsius vs Fahrenheit.</h1>
+    <h3>100 centimeters vs 36 inches? 100 grams vs 16 ounces? 1000 meters vs 5280 feet? 0 degrees Celcius vs 32 degrees Fahrenheit? WTF!?</h2>
+    <h2>Why do Americans have to learn the most bizarre way of calculating simple things? This needs to stop.</h2>
+    <h1>Sign the petition to force the United States of America to finally adapt to the rest of the World!</h1>
 </div>
 {{>image}}
 <div class="view">
     <form method = "POST">
-        <input type="text" id="firstname" name="first">
+        <input type="text" id="firstname" name="first" autocomplete="off">
         <br><label for="firstname">First Name</label><br>
-        <br><input type="text" id="lastname" name="last">
+        <br><input type="text" id="lastname" name="last" autocomplete="off">
         <br><label for="firstname">Last Name</label><br>
         <input id="hid" type="hidden" name="sig"><br>
         <div id="sketch"><canvas id="paint" width="500" height="100" style="border:1px solid #000000;"></canvas></div>
         <label for="paint">Digital Signature</label><br><br>
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
         <br><button id="submit-button">Submit</button>
     </form>
 </div>

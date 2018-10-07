@@ -1,9 +1,9 @@
 .header {
-    border: 1px solid red;
-    background-color: pink;
+    border: 1px solid darkblue;
+    background-color: blue;
     margin: 20px;
     padding: 20px;
-    color: yellow;
+    color: white;
 }
 
 .view {
@@ -15,8 +15,8 @@
 }
 
 .partial {
-    border: 1px solid darkblue;
-    background-color: lightblue;
+    border: 1px solid red;
+    background-color: pink;
     margin: 20px;
     padding: 20px;
 }
@@ -42,7 +42,11 @@ label {
     padding: 5px;
 }
 
-img {
+#pikachu {
     width: 250px;
     height: 244px;
+}
+
+li {
+    font-size: 20px;
 }

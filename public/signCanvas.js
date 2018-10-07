@@ -24,7 +24,7 @@ canvas.addEventListener('mousedown', function(e) {
 	canvas.addEventListener('mousemove', onPaint, false);
 }, false);
 
-canvas.addEventListener('mouseup', function() {
+document.addEventListener('mouseup', function() {
 	canvas.removeEventListener('mousemove', onPaint, false);
     $('#hid').val(canvas.toDataURL());
 }, false);

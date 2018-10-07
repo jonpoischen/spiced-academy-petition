@@ -1,0 +1,9 @@
+<div class="header">
+    <h1>Like-minded people who signed:</h1>
+</div>
+{{>image}}
+<div class="view">
+    <ol>{{#each signers}}
+        <li>{{this.first}} {{this.last}}</li>
+    {{/each}}</ol>
+</div>

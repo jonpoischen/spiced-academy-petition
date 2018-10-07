@@ -2,59 +2,75 @@ const express = require('express');
 const app = express();
 const hb = require('express-handlebars');
 const database = require('./database.js');
+const csurf = require('csurf');
 app.engine('handlebars', hb());
 app.set('view engine', 'handlebars');
 
-app.use(express.static('public'));
-app.use(require('body-parser').urlencoded({
-    extended: false
+var cookieSession = require('cookie-session');
+app.use(cookieSession({
+    secret: `I'm always angry.`,
+    maxAge: 1000 * 60 * 60 * 24 * 14
 }));
-app.use(require('cookie-parser')());
+
+app.use(require('body-parser').urlencoded({extended: false}));
+
+app.use(csurf());
+
+app.use(function(req, res, next) {
+    res.locals.csrfToken = req.csrfToken();
+    next();
+});	
+
+app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-    res.render('home', {
-        layout: 'main',
-        title: 'Home Page'
-    })
+    if (req.session.sigId) {
+        res.redirect('/success')
+    } else {
+        res.render('home', {
+            layout: 'main',
+            title: 'Home Page'
+        })
+    }
 });
 
 app.get('/success', (req, res) => {
-    res.render('success', {
-        layout: 'main',
-        title: 'Success Page'
-    })
+    database.showTotalSigners().then(num => {
+        database.showSig(req.session.sigId).then(sig => {
+            res.render('success', {
+                layout: 'main',
+                title: 'Success Page',
+                sig: sig
+            });
+        });
+    });
 });
 
 app.post('/', (req, res) => {
-    console.log(req.body.first);
-    console.log(req.body.last);
-    console.log(req.body.sig);
-    database.setSig(req.body.first,req.body.last,req.body.sig).then(
-        result => console.log(result)
-    )
-})
+    database.setSig(req.body.first,req.body.last,req.body.sig)
+    .then(id => {
+        req.session.sigId = id;
+        res.redirect('/success');
+    })
+});
 
-
-/*
-
-{{#if error}}
-    <div class="error">You messed up</div>
-<form method = "POST">
-    <input>
-    <input>
-    <input>
-    <button></button>
-</form>
-
-
-// exports.getCityByName(name) {
-//     return db.query(
-//         `SELECT * FROM cities WHERE name = $1`,
-//         [name]
-//     )
-// };
-
-3 get routes and 1 post route (submit button)
-*/
+app.get('/signers', (req, res) => {
+    database.showNames().then(signers => {
+        res.render('signers', {
+            layout: 'main',
+            title: 'Others Who Signed',
+            signers: signers
+        })
+    });
+});
 
 app.listen(8080, () => console.log('Listening on port 8080'));
+
+/*
+CREATE TABLE signatures(
+   id SERIAL PRIMARY KEY,
+   first VARCHAR(100) NOT NULL,
+   last VARCHAR(200) NOT NULL,
+   signature TEXT NOT NULL
+);
+*/
