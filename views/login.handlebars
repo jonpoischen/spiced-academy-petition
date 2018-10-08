@@ -1,0 +1,15 @@
+<div class="header">
+    <h1>Please <a href='/register' style='color: yellow'><u>register</u></a> or login.</h1>
+</div>
+{{>image}}
+<div class="view">
+    {{#if myErr}}<h2 id="error">Please fill out all the fields!</h2>{{/if}}
+    <form method="POST">
+        <input type="text" name="email" autocomplete="off">
+        <br><label for="email">E-mail</label><br>
+        <input type="text" name="password" autocomplete="off">
+        <br><label for="password">Password</label><br>
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        <br><button id="login-button" type="submit">Login</button>
+    </form>
+</div>

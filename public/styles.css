@@ -50,3 +50,7 @@ label {
 li {
     font-size: 20px;
 }
+
+#error {
+    color: white;
+}
