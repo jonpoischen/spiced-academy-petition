@@ -1,0 +1,16 @@
+<div class="header">
+    <h1>Optional: Please tell us a little about yourself.</h1>
+</div>
+{{>image}}
+<div class="view">
+    <form method="POST">
+        <input type="number" name="age" autocomplete="off">
+        <br><label for="age">Age</label><br>
+        <input type="text" name="city" autocomplete="off">
+        <br><label for="city">City</label><br>
+        <input type="url" name="url" autocomplete="off">
+        <br><label for="url">Homepage</label><br>
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        <br><button id="submit-button" type="submit">Submit</button>
+    </form>
+</div>

@@ -4,6 +4,19 @@
 {{>image}}
 <div class="view">
     <ol>{{#each signers}}
-        <li>{{this.first}} {{this.last}}</li>
+        <li>{{#if this.url}}
+                <a href='{{this.url}}'>{{this.first}} {{this.last}}</a>
+            {{else}}
+                {{this.first}} {{this.last}}
+            {{/if}}
+
+            {{#if this.age}}
+                , {{this.age}}
+            {{/if}}
+
+            {{#if this.city}}
+                <a href='/signers/{{this.city}}'>, {{this.city}}</a>
+            {{/if}}
+        </li>
     {{/each}}</ol>
 </div>

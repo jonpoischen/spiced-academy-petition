@@ -3,10 +3,12 @@ const app = express();
 const hb = require('express-handlebars');
 const db = require('./database.js');
 const csurf = require('csurf');
+const cookieSession = require('cookie-session');
+
 app.engine('handlebars', hb());
+
 app.set('view engine', 'handlebars');
 
-var cookieSession = require('cookie-session');
 app.use(cookieSession({
     secret: `I'm always angry.`,
     maxAge: 1000 * 60 * 60 * 24 * 14
@@ -29,13 +31,21 @@ function checkForUser(req, res, next) {
 	}
 }
 
+function checkForSig(req, res, next) {
+    if(req.session.sigId) {
+        res.redirect('/success');
+    } else {
+        next();
+    }
+}
+
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
     res.redirect('/register');
 });
 
-app.get('/register', (req, res) => {
+app.get('/register', checkForSig, checkForSig, (req, res) => {
     res.render('register', {
         layout: 'main',
         title: 'Registration'
@@ -47,7 +57,7 @@ app.post('/register', (req, res) => {
     .then(hash => {
         return db.insertNewUser(req.body.first, req.body.last, req.body.email, hash).then(results => {
             req.session.userId = results.rows[0].id;
-            res.redirect('/home');
+            res.redirect('/profile');
         })
     })
     .catch(err => {
@@ -59,7 +69,7 @@ app.post('/register', (req, res) => {
     })
 });
 
-app.get('/login', (req, res) => {
+app.get('/login', checkForSig, (req, res) => {
     res.render('login', {
         layout: 'main',
         title: 'Login'
@@ -67,40 +77,55 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-    db.showHashPw(req.body.email).then(userPw => {
-        db.checkPassword(req.body.password, userPw);
-        db.getLoginId(req.body.email).then(id => {
-            req.session.userId = id;
-            res.redirect('/home');
+    db.showHashPw(req.body.email)
+        .then(userPw => {
+            return db.checkPassword(req.body.password, userPw)
+        })
+        .then(doesMatch => {
+            if(doesMatch) {
+                db.getLoginId(req.body.email).then(id => {
+                    req.session.userId = id;
+                    return db.checkForSig(id).then(sigId => {
+                        if (sigId) {
+                            req.session.sigId = sigId;
+                            res.redirect('/success');
+                        } else {
+                            res.redirect('/profile');
+                        }
+                    })
+                })
+            } else {
+                res.redirect('/register');
+            }
         })
         .catch(err => {
-            res.render('login', {
-                myErr: err.message,
-                layout: 'main',
-                title: 'Login'
-            })
+            console.log(err);
         })
-    })
-    .catch(err => {
-        console.log("yo made it!");
-        res.render('login', {
-            myErr: err.message,
-            layout: 'main',
-            title: 'Login'
-        })
+});
+
+app.get('/profile', checkForUser, checkForSig, (req, res) => {
+    res.render('profile', {
+        layout: 'main',
+        title: 'Profile Page'
     })
 });
 
-app.get('/home', checkForUser, (req, res) => {
+app.post('/profile', (req, res) => {
+    db.insertUserProfile(req.session.userId, req.body.age, req.body.city, req.body.url)
+    .then(() => {
+        res.redirect('/petition');
+    })
+})
+
+app.get('/petition', checkForUser, checkForSig, (req, res) => {
     if (req.session.sigId) {
         res.redirect('/success');
     } else {
         db.getUserName(req.session.userId)
         .then(info => {
-            console.log(info);
-            res.render('home', {
+            res.render('petition', {
                 layout: 'main',
-                title: 'Home Page',
+                title: 'Petition Page',
                 userFirst: info.first,
                 userLast: info.last
             })
@@ -108,8 +133,8 @@ app.get('/home', checkForUser, (req, res) => {
     }
 });
 
-app.post('/home', (req, res) => {
-    db.setSig(req.body.first,req.body.last,req.body.sig)
+app.post('/petition', (req, res) => {
+    db.setSig(req.session.userId, req.body.sig)
     .then(id => {
         req.session.sigId = id;
         res.redirect('/success');
@@ -129,7 +154,7 @@ app.get('/success', checkForUser, (req, res) => {
 });
 
 app.get('/signers', checkForUser, (req, res) => {
-    db.showNames().then(signers => {
+    db.showSigners().then(signers => {
         res.render('signers', {
             layout: 'main',
             title: 'Others Who Signed',
@@ -137,5 +162,15 @@ app.get('/signers', checkForUser, (req, res) => {
         })
     });
 });
+
+app.get('/signers/:city', checkForUser, (req, res) => {
+    db.showSignersByCity(req.params.city).then(signers => {
+        res.render('signers', {
+            layout: 'main',
+            title: 'Others Who Signed In Your City',
+            signers: signers
+        })
+    });
+})
 
 app.listen(8080, () => console.log('Listening on port 8080'));
