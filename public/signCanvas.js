@@ -7,6 +7,8 @@ var sketch_style = getComputedStyle(sketch);
 var mouse = {x: 0, y: 0};
 var last_mouse = {x: 0, y: 0};
 
+let hasSigned = false;
+
 canvas.addEventListener('mousemove', function(e) {
 	last_mouse.x = mouse.x;
 	last_mouse.y = mouse.y;
@@ -26,7 +28,7 @@ canvas.addEventListener('mousedown', function(e) {
 
 document.addEventListener('mouseup', function() {
 	canvas.removeEventListener('mousemove', onPaint, false);
-    $('#hid').val(canvas.toDataURL());
+	if (hasSigned) $('#hid').val(canvas.toDataURL());
 }, false);
 
 var onPaint = function() {
@@ -35,4 +37,5 @@ var onPaint = function() {
 	ctx.lineTo(mouse.x, mouse.y);
 	ctx.closePath();
 	ctx.stroke();
+	hasSigned = true;
 };

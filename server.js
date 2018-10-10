@@ -98,9 +98,7 @@ app.post('/login', (req, res) => {
                 res.redirect('/register');
             }
         })
-        .catch(err => {
-            console.log(err);
-        })
+        .catch(err => {console.log(err)})
 });
 
 app.get('/profile', checkForUser, checkForSig, (req, res) => {
@@ -134,11 +132,20 @@ app.get('/petition', checkForUser, checkForSig, (req, res) => {
 });
 
 app.post('/petition', (req, res) => {
-    db.setSig(req.session.userId, req.body.sig)
-    .then(id => {
-        req.session.sigId = id;
-        res.redirect('/success');
-    })
+    if (!req.body.sig) {
+        res.render('petition', {
+            layout: 'main',
+            title: 'Petition Page',
+            error: "Please sign below."
+        })
+    } else {
+        db.setSig(req.session.userId, req.body.sig)
+        .then(id => {
+            req.session.sigId = id;
+            console.log(id);
+            res.redirect('/success');
+        })
+    }
 });
 
 app.get('/success', checkForUser, (req, res) => {
@@ -147,11 +154,57 @@ app.get('/success', checkForUser, (req, res) => {
             res.render('success', {
                 layout: 'main',
                 title: 'Success Page',
+                num: num,
                 sig: sig
             });
         });
     });
 });
+
+app.get('/editprofile', checkForUser, (req, res) => {
+    db.getUserData(req.session.userId).then(data => {
+        res.render('editprofile', {
+            layout: 'main',
+            title: 'Edit Profile',
+            data: data[0]
+        });
+    })
+    .catch(err => {console.log(err)})
+});
+
+app.post('/editprofile', (req, res) => {
+    if (req.body.password) {
+        db.hashPassword(req.body.password)
+        .then(hash => {
+            Promise.all([
+                db.pushUserData(req.session.userId, req.body.first, req.body.last, req.body.email, hash),
+                db.pushUserProfileData(req.session.userId, req.body.age, req.body.city, req.body.url)
+            ])
+            .then(() => {res.redirect('/success')})
+            .catch(err => {console.log(err)})
+        })
+        .catch(err => {console.log(err)})
+    } else {
+        Promise.all([
+            db.pushUserDataNoPw(req.session.userId, req.body.first, req.body.last, req.body.email),
+            db.pushUserProfileData(req.session.userId, req.body.age, req.body.city, req.body.url).catch(err => {
+                console.log("asdf");
+                throw err;
+            })
+        ])
+        .then(() => {res.redirect('/success')})
+        .catch(err => {console.log(err)})
+    }
+});
+
+app.post('/removesig', checkForUser, (req, res) => {
+    db.removeUserSig(req.session.userId)
+    .then(() => {
+        delete req.session.sigId;
+        delete req.body.sig;
+        res.redirect('/petition')})
+    .catch(err => {console.log(err)})
+})
 
 app.get('/signers', checkForUser, (req, res) => {
     db.showSigners().then(signers => {
