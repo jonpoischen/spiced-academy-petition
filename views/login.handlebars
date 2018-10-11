@@ -6,7 +6,7 @@
     {{#if myErr}}<h2 id="error">Account doesn't exist!</h2>{{/if}}
     <form method="POST">
         <input type="email" name="email" autocomplete="off" required>
-        <br><label for="email">E-mail</label><br>
+        <br><label for="email">E-mail</label><br><br>
         <input type="password" name="password" autocomplete="off" required>
         <br><label for="password">Password</label><br>
         <input type="hidden" name="_csrf" value="{{csrfToken}}">

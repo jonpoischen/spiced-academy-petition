@@ -79,7 +79,11 @@ app.get('/login', checkForSig, (req, res) => {
 app.post('/login', (req, res) => {
     db.showHashPw(req.body.email)
         .then(userPw => {
-            return db.checkPassword(req.body.password, userPw)
+            if (!userPw) {
+                res.redirect('/register');
+            } else {
+                return db.checkPassword(req.body.password, userPw)
+            }
         })
         .then(doesMatch => {
             if(doesMatch) {
@@ -142,7 +146,6 @@ app.post('/petition', (req, res) => {
         db.setSig(req.session.userId, req.body.sig)
         .then(id => {
             req.session.sigId = id;
-            console.log(id);
             res.redirect('/success');
         })
     }
@@ -206,12 +209,22 @@ app.post('/removesig', checkForUser, (req, res) => {
     .catch(err => {console.log(err)})
 });
 
-// app.post('/deleteaccount', checkForUser, (req, res) => {
-//     db.removeUserFromDB(req.session.userId)
-//     .then(() => {
-//
-//     })
-// });
+app.post('/logout', checkForUser, (req, res) => {
+    delete req.session.sigId;
+    delete req.body.sig;
+    delete req.session.userId;
+    res.redirect('/login');
+})
+
+app.post('/deleteaccount', checkForUser, (req, res) => {
+    db.removeUserFromDB(req.session.userId)
+    .then(() => {
+        delete req.session.sigId;
+        delete req.body.sig;
+        delete req.session.userId;
+        res.redirect('/register');
+    })
+});
 
 app.get('/signers', checkForUser, (req, res) => {
     db.showSigners().then(signers => {

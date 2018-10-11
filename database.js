@@ -11,7 +11,6 @@ if (process.env.NODE_ENV === 'production') {
 }
 const db = spicedPg(dbUrl);
 
-
 exports.setSig = function (user_id, sig) {
     return db.query(`INSERT INTO signatures (user_id, signature) VALUES ($1, $2) RETURNING id;`,
     [user_id || null, sig || null])
@@ -155,9 +154,10 @@ exports.insertUserProfile = function(user_id, age, city, url) {
 
 exports.showHashPw = function (email) {
     return db.query(`SELECT password FROM users WHERE email = $1`, [email])
-        .then(function(result) {
-            return result.rows[0].password;
-        })
+    .then(function(result) {
+        return result.rows[0] && result.rows[0].password;
+    })
+    .catch(function(err) {console.log(err)})
 }
 
 exports.getUserData = function (id) {
@@ -225,11 +225,7 @@ exports.removeUserSig = function (id) {
 
 exports.removeUserFromDB = function (id) {
     const q = `
-    DELETE FROM signatures
-    WHERE user_id = $1;
-    DELETE from user_profiles
-    WHERE user_id = $1;
-    DELETE from users
+    DELETE FROM users
     WHERE id = $1;
     `;
     const params = [id || null];
