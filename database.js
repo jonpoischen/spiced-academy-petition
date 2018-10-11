@@ -1,7 +1,8 @@
 const spicedPg = require('spiced-pg');
 const bcrypt = require('bcryptjs');
 const {dbUser, dbPassword} = require('./secrets.json')
-const db = spicedPg(`postgres:${dbUser}:${dbPassword}@localhost:5432/sage`);
+const dbUrl = process.env.DATABASE_URL || `postgres:${dbUser}:${dbPassword}@localhost:5432/sage`;
+const db = spicedPg(dbUrl);
 
 exports.setSig = function (user_id, sig) {
     return db.query(`INSERT INTO signatures (user_id, signature) VALUES ($1, $2) RETURNING id;`,
@@ -208,6 +209,20 @@ exports.removeUserSig = function (id) {
     const q = `
     DELETE FROM signatures
     WHERE user_id = $1;
+    `;
+    const params = [id || null];
+
+    return db.query(q, params);
+}
+
+exports.removeUserFromDB = function (id) {
+    const q = `
+    DELETE FROM signatures
+    WHERE user_id = $1;
+    DELETE from user_profiles
+    WHERE user_id = $1;
+    DELETE from users
+    WHERE id = $1;
     `;
     const params = [id || null];
 

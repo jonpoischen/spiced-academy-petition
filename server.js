@@ -204,7 +204,14 @@ app.post('/removesig', checkForUser, (req, res) => {
         delete req.body.sig;
         res.redirect('/petition')})
     .catch(err => {console.log(err)})
-})
+});
+
+// app.post('/deleteaccount', checkForUser, (req, res) => {
+//     db.removeUserFromDB(req.session.userId)
+//     .then(() => {
+//
+//     })
+// });
 
 app.get('/signers', checkForUser, (req, res) => {
     db.showSigners().then(signers => {
@@ -226,4 +233,4 @@ app.get('/signers/:city', checkForUser, (req, res) => {
     });
 })
 
-app.listen(8080, () => console.log('Listening on port 8080'));
+app.listen(process.env.PORT || 8080, () => console.log('Listening...'));
