@@ -1,8 +1,16 @@
 const spicedPg = require('spiced-pg');
 const bcrypt = require('bcryptjs');
-const {dbUser, dbPassword} = require('./secrets.json')
-const dbUrl = process.env.DATABASE_URL || `postgres:${dbUser}:${dbPassword}@localhost:5432/sage`;
+let secrets;
+let dbUrl;
+if (process.env.NODE_ENV === 'production') {
+    secrets = process.env
+    dbUrl = secrets.DATABASE_URL
+} else {
+    secrets = require('./secrets.json')
+    dbUrl = `postgres:${secrets.dbUser}:${secrets.dbPassword}@localhost:5432/sage`;
+}
 const db = spicedPg(dbUrl);
+
 
 exports.setSig = function (user_id, sig) {
     return db.query(`INSERT INTO signatures (user_id, signature) VALUES ($1, $2) RETURNING id;`,
