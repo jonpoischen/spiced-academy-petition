@@ -42,22 +42,28 @@ label {
     font-size: 20px;
 }
 
-.pikachus {
+.pokemon {
     width: 10%;
     overflow: hidden;
     display: inline;
 }
 
 #pikachu {
+    width: 9%;
+    overflow: hidden;
+    display: inline;
+    position: relative;
+    top: -10px;
+}
+
+#charmander {
     width: 10%;
     overflow: hidden;
     display: inline;
 }
 
-#pikachu_2 {
-    width: 10%;
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
+#mew {
+    width: 12%;
     overflow: hidden;
     display: inline;
 }
