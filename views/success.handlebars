@@ -7,15 +7,15 @@
     <img src="{{sig}}" width="500" height="100">
     <br>
     <a href='/signers'><h3>See the other {{num}} people who signed!<h3></a>
-    <a href='/editprofile'><h3>Edit your profile</h3></a>
+    <a href='/editprofile'><h3>Edit Your Profile</h3></a>
     <form action="/removesig" method="post">
-        <button>Remove your signature</button>
+        <button>Remove Your Signature</button>
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
-    </form>
+    </form><br>
     <form action="/logout" method="post">
         <button>Logout</button>
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
-    </form>
+    </form><br>
     <form action="/deleteaccount" method="post">
         <button>Delete Account</button>
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
