@@ -9,7 +9,7 @@
 <div class="view">
     <h3>{{error}}</h3>
     <form method = "POST">
-        <input id="hid" name="sig"><br>
+        <input id="hid" type="hidden" name="sig"><br>
         <div id="sketch"><canvas id="paint" width="500" height="100" style="border:1px solid #000000;"></canvas></div>
         <label for="paint">Digital Signature</label><br><br>
         <input type="hidden" name="_csrf" value="{{csrfToken}}">

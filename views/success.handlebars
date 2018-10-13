@@ -1,5 +1,10 @@
 <div class="header">
     <h1>Thanks for signing the petition!</h1>
+    <div class="video-background">
+    <div class="video-foreground">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/uwmeH6Rnj2E?autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+  </div>
 </div>
 {{>image}}
 <div class="view">
@@ -7,7 +12,7 @@
     <img src="{{sig}}" width="500" height="100">
     <br>
     <a href='/signers'><h3>See the other {{num}} people who signed!<h3></a>
-    <a href='/editprofile'><h3>Edit Your Profile</h3></a>
+    <a href='/editprofile'><button>Edit Your Profile</button></a><br><br>
     <form action="/removesig" method="post">
         <button>Remove Your Signature</button>
         <input type="hidden" name="_csrf" value="{{csrfToken}}">

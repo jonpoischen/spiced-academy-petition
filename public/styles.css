@@ -1,9 +1,16 @@
+.view, .header, h1 {
+    text-align: center;
+    font-family: 'Corben', Georgia, Times, serif;
+    text-shadow: 1px 1px 1px #ccc;
+}
+
 .header {
     border: 1px solid #fabc09;
     background-color: #facc43;
     margin: 20px;
     padding: 20px;
     color: #374353;
+    box-shadow: 10px 10px 1em #fabc09;
 }
 
 .view {
@@ -12,6 +19,7 @@
     margin: 20px;
     padding: 20px;
     color: #374353;
+    box-shadow: 10px 10px 1em #fabc09;
 }
 
 .partial {
@@ -23,23 +31,44 @@
 
 a {
     text-decoration: none;
+    font-family: 'Nobile', Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: #ffffb0;
+}
+
+button {
+    background-color: #ffffb0;
+    font-size: 20px;
+    box-shadow: 5px 5px 1em #ccc;
+    font-family: 'Nobile', Helvetica, Arial, sans-serif;
 }
 
 p {
     font-size: 20px;
-}
-
-input {
-    width: 480px;
+    font-family: 'Nobile', Helvetica, Arial, sans-serif;
 }
 
 canvas {
     background-color: white;
 }
 
-label {
-    padding: 5px;
+input {
+    width: 480px;
+    box-shadow: 10px 10px 1em #ccc;
     font-size: 20px;
+}
+
+label {
+    font-size: 24px;
+}
+
+li {
+    font-size: 30px;
+    list-style-type: none;
+    font-family: 'Nobile', Helvetica, Arial, sans-serif;
+    margin-bottom: 16px;
 }
 
 .pokemon {
@@ -68,10 +97,17 @@ label {
     display: inline;
 }
 
-li {
-    font-size: 20px;
-}
-
 #error {
     color: white;
 }
+
+/* .video-foreground,
+.video-background iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+} */

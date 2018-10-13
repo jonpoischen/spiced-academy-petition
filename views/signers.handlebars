@@ -4,7 +4,7 @@
 {{>image}}
 <div class="view">
     <a href='/success'><h3>Go Back</h3></a>
-    <ol>{{#each signers}}
+    {{#each signers}}
         <li>{{#if this.url}}
                 <a href='{{this.url}}'>{{this.first}} {{this.last}}</a>
             {{else}}
@@ -12,12 +12,13 @@
             {{/if}}
 
             {{#if this.age}}
-                , {{this.age}}
+                | {{this.age}}
             {{/if}}
 
             {{#if this.city}}
-                <a href='/signers/{{this.city}}'>, {{this.city}}</a>
+                <a href='/signers/{{this.city}}'>| {{this.city}}</a>
             {{/if}}
         </li>
-    {{/each}}</ol>
+    {{/each}}
+    <a href='/success'><h3>Go Back</h3></a>
 </div>

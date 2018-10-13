@@ -4,21 +4,23 @@
 {{>image}}
 <div class="view">
     <form method="POST">
-        <input type="text" name="first" value="{{data.first}}" autocomplete="off" required>
-        <br><label for="first">First Name</label><br><br>
-        <input type="text" name="last" value="{{data.last}}" autocomplete="off" required>
-        <br><label for="last">Last Name</label><br><br>
-        <input type="text" name="email" value="{{data.email}}" autocomplete="off" required>
-        <br><label for="email">Email</label><br><br>
-        <input type="password" name="password" autocomplete="off" required>
-        <br><label for="password">Password</label><br><br>
-        <input type="number" name="age" value="{{data.age}}" autocomplete="off">
-        <br><label for="age">Age</label><br><br>
-        <input type="text" name="city" value="{{data.city}}" autocomplete="off">
-        <br><label for="city">City</label><br><br>
-        <input type="url" name="url" value="{{data.url}}" autocomplete="off">
+        <br><label for="first">First Name</label><br>
+        <input type="text" name="first" value="{{data.first}}" autocomplete="off" required><br><br><br>
+        <br><label for="last">Last Name</label><br>
+        <input type="text" name="last" value="{{data.last}}" autocomplete="off" required><br><br><br>
+        <br><label for="email">Email</label><br>
+        <input type="text" name="email" value="{{data.email}}" autocomplete="off" required><br><br><br>
+        <br><label for="password">Password</label><br>
+        <input type="password" name="password" autocomplete="off" required><br><br><br>
+        <br><label for="age">Age</label><br>
+        <input type="number" name="age" value="{{data.age}}" autocomplete="off"><br><br><br>
+        <br><label for="city">City</label><br>
+        <input type="text" name="city" value="{{data.city}}" autocomplete="off"><br><br><br>
         <br><label for="url">Homepage</label><br>
+        <input type="url" name="url" value="{{data.url}}" autocomplete="off"><br><br>
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
         <br><button id="submit-button" type="submit">Submit</button>
     </form>
+
+    <a href='/success'><h3>Go Back</h3></a>
 </div>
