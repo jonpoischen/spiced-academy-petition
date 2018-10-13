@@ -45,7 +45,7 @@ app.get('/', (req, res) => {
     res.redirect('/register');
 });
 
-app.get('/register', checkForSig, checkForSig, (req, res) => {
+app.get('/register', checkForSig, (req, res) => {
     res.render('register', {
         layout: 'main',
         title: 'Registration'
@@ -191,7 +191,6 @@ app.post('/editprofile', (req, res) => {
         Promise.all([
             db.pushUserDataNoPw(req.session.userId, req.body.first, req.body.last, req.body.email),
             db.pushUserProfileData(req.session.userId, req.body.age, req.body.city, req.body.url).catch(err => {
-                console.log("asdf");
                 throw err;
             })
         ])
